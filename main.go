@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	output := calculateTotalDistance(Ex1_list1, Ex1_list2)
+	output := calculateSimilarityScore(Ex1_list1, Ex1_list2)
 
 	fmt.Printf("%v\n", output)
 }
@@ -31,5 +31,27 @@ func calculateTotalDistance(list1, list2 []int) int {
 	return totalDistance
 }
 
-func sortList(list []int) {
+// A similarity score is calculated by adding up
+// each number in the left list
+// after multiplying it by the number of times that number appears in the right list.
+func calculateSimilarityScore(list1, list2 []int) int {
+	similarityScore := 0
+
+	for i := 0; i < len(list1); i++ {
+		// For each item in this list
+		// Check how many times it exists in list2
+
+		number := list1[i]
+		numberFoundInList2 := 0
+
+		for j := 0; j < len(list2); j++ {
+			if list2[j] == number {
+				numberFoundInList2++
+			}
+		}
+
+		similarityScore += number * numberFoundInList2
+	}
+
+	return similarityScore
 }
