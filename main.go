@@ -55,3 +55,60 @@ func calculateSimilarityScore(list1, list2 []int) int {
 
 	return similarityScore
 }
+
+func checkLevelsSafety(levels []int) bool {
+	const (
+		increasing = iota
+		decreasing
+	)
+
+	var direction int
+
+	if levels[1] > levels[0] {
+		direction = increasing
+	} else if levels[1] < levels[0] {
+		direction = decreasing
+	} else {
+		// Neither increasing or decreasing means not safe
+		return false
+	}
+
+	for i := 0; i < len(levels)-1; i++ {
+		if direction == increasing {
+			// Have to keep increasing or decreasing
+			if levels[i+1] == levels[i] || levels[i+1] < levels[i] {
+				return false
+			}
+		}
+
+		if direction == decreasing {
+			if levels[i+1] == levels[i] || levels[i+1] > levels[i] {
+				return false
+			}
+		}
+
+		diff := levels[i+1] - levels[i]
+		if diff < 0 {
+			diff = -diff
+		}
+
+		if diff < 1 || diff > 3 {
+			return false
+		}
+	}
+
+	// No error cases met
+	// means we kept increasing or decreasing
+	// and the diff between 2 levels was always between 1 and 3
+	return true
+}
+
+func countSafeReports(report [][]int) int {
+	count := 0
+	for i := 0; i < len(report); i++ {
+		if checkLevelsSafety(report[i]) == true {
+			count++
+		}
+	}
+	return count
+}
