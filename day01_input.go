@@ -1,6 +1,6 @@
 package main
 
-var Ex1_list1 = []int{
+var Day01_list1 = []int{
 	38665,
 	84587,
 	93374,
@@ -1003,7 +1003,7 @@ var Ex1_list1 = []int{
 	39667,
 }
 
-var Ex1_list2 = []int{
+var Day01_list2 = []int{
 	13337,
 	21418,
 	50722,

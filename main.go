@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	output := calculateSimilarityScore(Ex1_list1, Ex1_list2)
+	output := calculateSimilarityScore(Day01_list1, Day01_list2)
 
 	fmt.Printf("%v\n", output)
 }
