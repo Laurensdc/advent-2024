@@ -6,12 +6,14 @@ import (
 )
 
 func main() {
-	output := getTotalDistance(Ex1_list1, Ex1_list2)
+	output := calculateTotalDistance(Ex1_list1, Ex1_list2)
 
 	fmt.Printf("%v\n", output)
 }
 
-func getTotalDistance(list1, list2 []int) int {
+// Sorts both lists and check the distance between each item
+// Returns total distance between all items in the list
+func calculateTotalDistance(list1, list2 []int) int {
 	slices.Sort(list1)
 	slices.Sort(list2)
 
