@@ -68,32 +68,26 @@ func readReports(filename string) [][]int {
 	if err != nil {
 		fmt.Printf("Failed to read file %v because of %v\n", filename, err)
 		os.Exit(1)
-		// return [][]int{}
 	}
 
 	defer file.Close()
-
 	scanner := bufio.NewScanner(file)
 
 	var reports = [][]int{}
-
 	for scanner.Scan() {
+		var numbers []int
 
-		lineStrings := strings.Fields(scanner.Text())
-		var lineInts []int
-
-		for i := 0; i < len(lineStrings); i++ {
-			anInt, err := strconv.Atoi(lineStrings[i])
-
+		numbersAsStrings := strings.Fields(scanner.Text())
+		for i := 0; i < len(numbersAsStrings); i++ {
+			number, err := strconv.Atoi(numbersAsStrings[i])
 			if err != nil {
-				fmt.Printf("Failed to parse str %v to int because of %v\n", lineStrings[i], err)
+				fmt.Printf("Failed to parse str %v to int because of %v\n", numbersAsStrings[i], err)
 				os.Exit(1)
 			}
-
-			lineInts = append(lineInts, anInt)
+			numbers = append(numbers, number)
 		}
 
-		reports = append(reports, lineInts)
+		reports = append(reports, numbers)
 	}
 
 	err = scanner.Err()
