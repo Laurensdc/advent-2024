@@ -6,9 +6,7 @@ import (
 )
 
 func main() {
-	list1 := []int{3, 4, 2, 1, 3, 3}
-	list2 := []int{4, 3, 5, 3, 9, 3}
-	output := getTotalDistance(list1, list2)
+	output := getTotalDistance(Ex1_list1, Ex1_list2)
 
 	fmt.Printf("%v\n", output)
 }
