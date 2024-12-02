@@ -14,12 +14,22 @@ func main() {
 }
 
 func getTotalDistance(list1, list2 []int) int {
-	sortList(list1)
-	sortList(list2)
+	slices.Sort(list1)
+	slices.Sort(list2)
 
-	return 5
+	totalDistance := 0
+
+	for i := 0; i < len(list1); i++ {
+		diff := list1[i] - list2[i]
+		if diff < 0 {
+			diff = -diff
+		}
+
+		totalDistance += diff
+	}
+
+	return totalDistance
 }
 
 func sortList(list []int) {
-	slices.Sort(list)
 }
