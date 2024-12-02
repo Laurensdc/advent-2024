@@ -1,12 +1,17 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"slices"
+	"strconv"
+	"strings"
 )
 
 func main() {
-	output := calculateSimilarityScore(Day01_list1, Day01_list2)
+	reports := readReports("day02_input.txt")
+	output := countSafeReports(reports)
 
 	fmt.Printf("%v\n", output)
 }
@@ -54,6 +59,50 @@ func calculateSimilarityScore(list1, list2 []int) int {
 	}
 
 	return similarityScore
+}
+
+// Read reports from file and transform to [][]int
+func readReports(filename string) [][]int {
+	file, err := os.Open(filename)
+
+	if err != nil {
+		fmt.Printf("Failed to read file %v because of %v\n", filename, err)
+		os.Exit(1)
+		// return [][]int{}
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	var reports = [][]int{}
+
+	for scanner.Scan() {
+
+		lineStrings := strings.Fields(scanner.Text())
+		var lineInts []int
+
+		for i := 0; i < len(lineStrings); i++ {
+			anInt, err := strconv.Atoi(lineStrings[i])
+
+			if err != nil {
+				fmt.Printf("Failed to parse str %v to int because of %v\n", lineStrings[i], err)
+				os.Exit(1)
+			}
+
+			lineInts = append(lineInts, anInt)
+		}
+
+		reports = append(reports, lineInts)
+	}
+
+	err = scanner.Err()
+	if err != nil {
+		fmt.Printf("Failed to read file %v because of %v\n", filename, err)
+		os.Exit(1)
+	}
+
+	return reports
 }
 
 func checkLevelsSafety(levels []int) bool {
