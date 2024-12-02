@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-var debugging = true
+var debugging = false
 
 func main() {
 	reports := readReports("day02_input.txt")
@@ -101,32 +101,53 @@ func readReports(filename string) [][]int {
 	return reports
 }
 
-func checkLevelsSafety(levels []int, withTolerance bool) bool {
+// If tolerateBadLevel is true, we will tolerate a single bad level
+func checkLevelsSafety(levels []int, tolerateBadLevel bool) bool {
+	stillTolerating := true
+
+	if debugging {
+		fmt.Printf("\n*** Checking levels %v\n", levels)
+	}
+
 	for i := 0; i < len(levels)-1; i++ {
-		// The same number consecutively is not allowed
-		if levels[i] == levels[i+1] {
-			return false
-		}
+		errNoIncreaseOrDecrease := levels[i] == levels[i+1]
 
-		// Have to keep increasing
 		wasIncreasing := i > 1 && levels[i] > levels[i-1]
-		if wasIncreasing && levels[i+1] < levels[i] {
-			return false
-		}
+		errDoesntKeepIncreasing := wasIncreasing && levels[i+1] < levels[i]
 
-		// have to keep decreasing
 		wasDecreasing := i > 1 && levels[i] < levels[i-1]
-		if wasDecreasing && levels[i+1] > levels[i] {
-			return false
-		}
+		errDoesntKeepDecreasing := wasDecreasing && levels[i+1] > levels[i]
 
 		diff := levels[i+1] - levels[i]
 		if diff < 0 {
 			diff = -diff
 		}
+		errDiffOutOfBounds := diff < 1 || diff > 3
 
-		if diff < 1 || diff > 3 {
-			return false
+		if debugging {
+			fmt.Printf("Processing %v and %v for i=%v\nerrors %v %v %v %v\nstillTolerating %v\n\n", levels[i], levels[i+1], i,
+				errNoIncreaseOrDecrease, errDoesntKeepIncreasing, errDoesntKeepDecreasing, errDiffOutOfBounds,
+				stillTolerating)
+		}
+
+		if errNoIncreaseOrDecrease || errDoesntKeepIncreasing || errDoesntKeepDecreasing || errDiffOutOfBounds {
+			if !tolerateBadLevel {
+				return false
+			}
+
+			if stillTolerating {
+				stillTolerating = false
+
+				// remove the current item and skip to next
+				levels = append(levels[:i], levels[i+1:]...)
+
+				if debugging {
+					fmt.Printf("No longer tolerating! New levels %v\n", levels)
+				}
+				i = -1 // Re-evaluate the level, i will increment at start of loop -_-
+			} else {
+				return false
+			}
 		}
 	}
 
