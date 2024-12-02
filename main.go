@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+var debugging = true
+
 func main() {
 	reports := readReports("day02_input.txt")
 	output := countSafeReports(reports)
@@ -99,35 +101,23 @@ func readReports(filename string) [][]int {
 	return reports
 }
 
-func checkLevelsSafety(levels []int) bool {
-	const (
-		increasing = iota
-		decreasing
-	)
-
-	var direction int
-
-	if levels[1] > levels[0] {
-		direction = increasing
-	} else if levels[1] < levels[0] {
-		direction = decreasing
-	} else {
-		// Neither increasing or decreasing means not safe
-		return false
-	}
-
+func checkLevelsSafety(levels []int, withTolerance bool) bool {
 	for i := 0; i < len(levels)-1; i++ {
-		if direction == increasing {
-			// Have to keep increasing or decreasing
-			if levels[i+1] == levels[i] || levels[i+1] < levels[i] {
-				return false
-			}
+		// The same number consecutively is not allowed
+		if levels[i] == levels[i+1] {
+			return false
 		}
 
-		if direction == decreasing {
-			if levels[i+1] == levels[i] || levels[i+1] > levels[i] {
-				return false
-			}
+		// Have to keep increasing
+		wasIncreasing := i > 1 && levels[i] > levels[i-1]
+		if wasIncreasing && levels[i+1] < levels[i] {
+			return false
+		}
+
+		// have to keep decreasing
+		wasDecreasing := i > 1 && levels[i] < levels[i-1]
+		if wasDecreasing && levels[i+1] > levels[i] {
+			return false
 		}
 
 		diff := levels[i+1] - levels[i]
@@ -149,7 +139,17 @@ func checkLevelsSafety(levels []int) bool {
 func countSafeReports(report [][]int) int {
 	count := 0
 	for i := 0; i < len(report); i++ {
-		if checkLevelsSafety(report[i]) == true {
+		if checkLevelsSafety(report[i], false) == true {
+			count++
+		}
+	}
+	return count
+}
+
+func countSafeReportsWithTolerance(report [][]int) int {
+	count := 0
+	for i := 0; i < len(report); i++ {
+		if checkLevelsSafety(report[i], true) == true {
 			count++
 		}
 	}
