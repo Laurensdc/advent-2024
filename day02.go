@@ -16,8 +16,8 @@ func CountSafeReportsWithTolerance(report [][]int) int {
 	count := 0
 	for i := 0; i < len(report); i++ {
 		debugPrint("\n\n-- Checking report %v", report[i])
-		badLevelIndex := getBadLevelIndex(report[i])
 
+		badLevelIndex := getBadLevelIndex(report[i])
 		debugPrint("Bad level index: %v", badLevelIndex)
 
 		if badLevelIndex == -1 { // Good level
@@ -26,23 +26,15 @@ func CountSafeReportsWithTolerance(report [][]int) int {
 			continue
 		}
 
-		// First retry
-		retriedReport := make([]int, len(report[i]))
-		copy(retriedReport, report[i])
-		retriedReport = removeItemFromSlice(retriedReport, badLevelIndex)
-
-		if getBadLevelIndex(retriedReport) == -1 {
+		cleanedReport := removeItemFromSlice(report[i], badLevelIndex)
+		if getBadLevelIndex(cleanedReport) == -1 {
 			debugPrint("-- REPORT SAFE")
 			count++
 			continue
 		}
 
-		// Second retry
-		retriedReport = make([]int, len(report[i]))
-		copy(retriedReport, report[i])
-		retriedReport = removeItemFromSlice(retriedReport, badLevelIndex+1)
-
-		if getBadLevelIndex(retriedReport) == -1 {
+		cleanedReport = removeItemFromSlice(report[i], badLevelIndex+1)
+		if getBadLevelIndex(cleanedReport) == -1 {
 			debugPrint("-- REPORT SAFE")
 			count++
 			continue
@@ -82,7 +74,7 @@ func isAscending(levels []int) bool {
 	return false
 }
 
-// -1 means all levels were good
+// Returns bad level index or -1 if all levels were good
 func getBadLevelIndex(levels []int) int {
 	debugPrint("\n** Checking levels %v", levels)
 
@@ -120,6 +112,11 @@ func getBadLevelIndex(levels []int) int {
 	return -1
 }
 
+// Will not modify the passed slice, but allocatea a new one
+// Then remove item[i] from it
 func removeItemFromSlice(slice []int, i int) []int {
-	return append(slice[:i], slice[i+1:]...)
+	// Allocate new array as append will mutate the passed slice
+	freshSlice := make([]int, len(slice))
+	copy(freshSlice, slice)
+	return append(freshSlice[:i], freshSlice[i+1:]...)
 }
