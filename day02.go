@@ -16,14 +16,9 @@ func CountSafeReportsWithTolerance(report [][]int) int {
 	count := 0
 	for i := 0; i < len(report); i++ {
 		badLevelIndex := getBadLevelIndex(report[i])
-		if debugging {
-			fmt.Printf("Bad level index: %v\n", badLevelIndex)
-		}
+		debugPrint("Bad level index: %v", badLevelIndex)
 
 		if badLevelIndex == -1 { // Good level
-			if debugging {
-				fmt.Println("REPORT SAFE")
-			}
 			count++
 			continue
 		}
@@ -33,15 +28,10 @@ func CountSafeReportsWithTolerance(report [][]int) int {
 		copy(cleanedUpReport, report[i])
 		cleanedUpReport = removeItemFromSlice(cleanedUpReport, badLevelIndex)
 
-		if debugging {
-			fmt.Printf("CleanedUpReport %v\n", cleanedUpReport)
-		}
+		debugPrint("CleanedUpReport %v", cleanedUpReport)
 		badLevelIndex2 := getBadLevelIndex(cleanedUpReport)
 
 		if badLevelIndex2 == -1 {
-			if debugging {
-				fmt.Println("REPORT SAFE")
-			}
 			count++
 			continue
 
@@ -52,22 +42,13 @@ func CountSafeReportsWithTolerance(report [][]int) int {
 		copy(cleanedUpReport2, report[i])
 		cleanedUpReport2 = removeItemFromSlice(cleanedUpReport2, badLevelIndex+1)
 
-		if debugging {
-			fmt.Printf("CleanedUpReport2 %v\n", cleanedUpReport2)
-		}
+		debugPrint("CleanedUpReport2 %v", cleanedUpReport2)
 		badLevelIndex = getBadLevelIndex(cleanedUpReport2)
 
 		if badLevelIndex == -1 {
-			if debugging {
-				fmt.Println("REPORT SAFE")
-			}
 			count++
 			continue
 		}
-		if debugging {
-			fmt.Println("REPORT NOT SAFE")
-		}
-
 	}
 	return count
 }
@@ -103,31 +84,26 @@ func isAscending(levels []int) bool {
 
 // -1 means all levels were good
 func getBadLevelIndex(levels []int) int {
-	if debugging {
-		fmt.Printf("\n*** Checking levels %v\n", levels)
-	}
+	debugPrint("\n*** Checking levels %v", levels)
 
 	isAscending := isAscending(levels)
 
 	for i := 0; i < len(levels)-1; i++ {
-		if debugging {
-			fmt.Printf("Processing %v and %v for i=%v\n",
-				levels[i], levels[i+1], i)
-		}
+		debugPrint("Processing %v and %v for i=%v", levels[i], levels[i+1], i)
 
 		if levels[i] == levels[i+1] {
-			fmt.Printf("NOT SAFE, %v == %v at %v\n", levels[i], levels[i+1], i)
+			debugPrint("NOT SAFE, %v == %v at %v", levels[i], levels[i+1], i)
 			return i
 
 		}
 
 		if isAscending == true && levels[i] > levels[i+1] {
-			fmt.Printf("NOT SAFE, err in asc ordering for %v, %v at i=%v\n", levels[i], levels[i+1], i)
+			debugPrint("NOT SAFE, err in asc ordering for %v, %v at i=%v", levels[i], levels[i+1], i)
 			return i
 		}
 
 		if isAscending == false && levels[i] < levels[i+1] {
-			fmt.Printf("NOT SAFE, err in desc ordering for %v, %v at i=%v\n", levels[i], levels[i+1], i)
+			debugPrint("NOT SAFE, err in desc ordering for %v, %v at i=%v", levels[i], levels[i+1], i)
 			return i
 		}
 
@@ -136,14 +112,10 @@ func getBadLevelIndex(levels []int) int {
 			diff = -diff
 		}
 		if diff < 1 || diff > 3 {
-			fmt.Printf("NOT SAFE, diff is %v at i=%v\n", diff, i)
+			debugPrint("NOT SAFE, diff is %v at i=%v", diff, i)
 			return i
 
 		}
-	}
-
-	if debugging {
-		fmt.Println("SAFE")
 	}
 
 	return -1

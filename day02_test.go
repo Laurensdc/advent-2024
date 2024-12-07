@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -14,7 +13,6 @@ func TestGetDirection(t *testing.T) {
 	}
 
 	input = []int{100, 99, 80, 24, 5, 1}
-	fmt.Println(input)
 	output = isAscending(input)
 	expected = false
 	if output != expected {
