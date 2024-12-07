@@ -4,12 +4,7 @@ import (
 	"fmt"
 )
 
-var debugging = true
-
-const (
-	ascending = iota
-	descending
-)
+var debugging = false
 
 func main() {
 	reports := ReadReports("day02_input.txt")

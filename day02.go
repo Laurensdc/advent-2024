@@ -25,19 +25,49 @@ func CountSafeReportsWithTolerance(report [][]int) int {
 				fmt.Println("REPORT SAFE")
 			}
 			count++
-		} else {
-			cleanedUpReport := make([]int, len(report[i]))
-			copy(cleanedUpReport, report[i])
+			continue
+		}
 
-			// Remove item at :badLevelIndex and retry
-			cleanedUpReport = append(cleanedUpReport[:badLevelIndex], cleanedUpReport[badLevelIndex+1])
-			badLevelIndex = getBadLevelIndex(cleanedUpReport)
+		// First retry
+		cleanedUpReport := make([]int, len(report[i]))
+		copy(cleanedUpReport, report[i])
+		cleanedUpReport = removeItemFromSlice(cleanedUpReport, badLevelIndex)
 
-			if badLevelIndex == -1 {
-				count++
+		if debugging {
+			fmt.Printf("CleanedUpReport %v\n", cleanedUpReport)
+		}
+		badLevelIndex2 := getBadLevelIndex(cleanedUpReport)
+
+		if badLevelIndex2 == -1 {
+			if debugging {
+				fmt.Println("REPORT SAFE")
 			}
+			count++
+			continue
 
 		}
+
+		// Second retry
+		cleanedUpReport2 := make([]int, len(report[i]))
+		copy(cleanedUpReport2, report[i])
+		cleanedUpReport2 = removeItemFromSlice(cleanedUpReport2, badLevelIndex+1)
+
+		if debugging {
+			fmt.Printf("CleanedUpReport2 %v\n", cleanedUpReport2)
+		}
+		badLevelIndex = getBadLevelIndex(cleanedUpReport2)
+
+		if badLevelIndex == -1 {
+			if debugging {
+				fmt.Println("REPORT SAFE")
+			}
+			count++
+			continue
+		}
+		if debugging {
+			fmt.Println("REPORT NOT SAFE")
+		}
+
 	}
 	return count
 }
@@ -107,9 +137,11 @@ func getBadLevelIndex(levels []int) int {
 		}
 		if diff < 1 || diff > 3 {
 			fmt.Printf("NOT SAFE, diff is %v at i=%v\n", diff, i)
+			return i
 
 		}
 	}
+
 	if debugging {
 		fmt.Println("SAFE")
 	}
@@ -117,7 +149,6 @@ func getBadLevelIndex(levels []int) int {
 	return -1
 }
 
-// TODO: Delete me?
 func removeItemFromSlice(slice []int, i int) []int {
 	return append(slice[:i], slice[i+1:]...)
 }
