@@ -59,7 +59,6 @@ func isAscending(levels []int) bool {
 			if ascendingCount >= 2 {
 				return true
 			}
-
 		}
 
 		if levels[i] > levels[i+1] {
@@ -86,15 +85,14 @@ func getBadLevelIndex(levels []int) int {
 		if levels[i] == levels[i+1] {
 			debugPrint("NOT SAFE, %v == %v at %v", levels[i], levels[i+1], i)
 			return i
-
 		}
 
-		if isAscending == true && levels[i] > levels[i+1] {
+		if isAscending && levels[i] > levels[i+1] {
 			debugPrint("NOT SAFE, err in asc ordering for %v, %v at i=%v", levels[i], levels[i+1], i)
 			return i
 		}
 
-		if isAscending == false && levels[i] < levels[i+1] {
+		if !isAscending && levels[i] < levels[i+1] {
 			debugPrint("NOT SAFE, err in desc ordering for %v, %v at i=%v", levels[i], levels[i+1], i)
 			return i
 		}
