@@ -1,6 +1,41 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
+
+func TestGetDirection(t *testing.T) {
+	input := []int{1, 5, 13, 24}
+	output := isAscending(input)
+	expected := true
+	if output != expected {
+		t.Errorf("Testing %v\nExpected\n%v\ngot\n%v\n", input, expected, output)
+	}
+
+	input = []int{100, 99, 80, 24, 5, 1}
+	fmt.Println(input)
+	output = isAscending(input)
+	expected = false
+	if output != expected {
+		t.Errorf("Testing %v\nExpected\n%v\ngot\n%v\n", input, expected, output)
+	}
+
+	input = []int{10, 9, 8, 10, 7, 6}
+	output = isAscending(input)
+	expected = false
+	if output != expected {
+		t.Errorf("Testing %v\nExpected\n%v\ngot\n%v\n", input, expected, output)
+	}
+
+	input = []int{1, 3, 6, 7, 6, 9, 10}
+	output = isAscending(input)
+	expected = true
+	if output != expected {
+		t.Errorf("Testing %v\nExpected\n%v\ngot\n%v\n", input, expected, output)
+	}
+
+}
 
 func TestReportSafety(t *testing.T) {
 	reports := [][]int{

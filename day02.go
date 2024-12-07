@@ -46,33 +46,29 @@ func CountSafeReportsWithTolerance(report [][]int) int {
 // and take into account the tolerance of 1 odd number.
 // As soon as 2 items are ascending or descending, we are certain
 // of the direction
-func getDirection(levels []int) int {
-	direction := 0
+func isAscending(levels []int) bool {
 	ascendingCount := 0
 	descendingCount := 0
+
 	for i := 0; i < len(levels)-1; i++ {
-		if levels[i] < levels[i]+1 {
+		if levels[i] < levels[i+1] {
 			ascendingCount++
 			if ascendingCount >= 2 {
-				direction = ascending
-				break
+				return true
 			}
 
 		}
+
 		if levels[i] > levels[i+1] {
 			descendingCount++
 			if descendingCount >= 2 {
-				direction = descending
-				break
+				return false
 			}
 		}
 	}
 
-	if debugging {
-		fmt.Printf("Direction: %v\n", direction)
-	}
-
-	return direction
+	fmt.Println("Error! Not ascending nor descending")
+	return false
 }
 
 // -1 means all levels were good
@@ -81,7 +77,7 @@ func getBadLevelIndex(levels []int) int {
 		fmt.Printf("\n*** Checking levels %v\n", levels)
 	}
 
-	direction := getDirection(levels)
+	isAscending := isAscending(levels)
 
 	for i := 0; i < len(levels)-1; i++ {
 		if debugging {
@@ -95,12 +91,12 @@ func getBadLevelIndex(levels []int) int {
 
 		}
 
-		if direction == ascending && levels[i] > levels[i+1] {
+		if isAscending == true && levels[i] > levels[i+1] {
 			fmt.Printf("NOT SAFE, err in asc ordering for %v, %v at i=%v\n", levels[i], levels[i+1], i)
 			return i
 		}
 
-		if direction == descending && levels[i] < levels[i+1] {
+		if isAscending == false && levels[i] < levels[i+1] {
 			fmt.Printf("NOT SAFE, err in desc ordering for %v, %v at i=%v\n", levels[i], levels[i+1], i)
 			return i
 		}
