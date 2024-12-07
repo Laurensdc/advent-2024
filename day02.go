@@ -15,40 +15,40 @@ func CountSafeReports(report [][]int) int {
 func CountSafeReportsWithTolerance(report [][]int) int {
 	count := 0
 	for i := 0; i < len(report); i++ {
+		debugPrint("\n\n-- Checking report %v", report[i])
 		badLevelIndex := getBadLevelIndex(report[i])
+
 		debugPrint("Bad level index: %v", badLevelIndex)
 
 		if badLevelIndex == -1 { // Good level
+			debugPrint("-- REPORT SAFE")
 			count++
 			continue
 		}
 
 		// First retry
-		cleanedUpReport := make([]int, len(report[i]))
-		copy(cleanedUpReport, report[i])
-		cleanedUpReport = removeItemFromSlice(cleanedUpReport, badLevelIndex)
+		retriedReport := make([]int, len(report[i]))
+		copy(retriedReport, report[i])
+		retriedReport = removeItemFromSlice(retriedReport, badLevelIndex)
 
-		debugPrint("CleanedUpReport %v", cleanedUpReport)
-		badLevelIndex2 := getBadLevelIndex(cleanedUpReport)
-
-		if badLevelIndex2 == -1 {
+		if getBadLevelIndex(retriedReport) == -1 {
+			debugPrint("-- REPORT SAFE")
 			count++
 			continue
-
 		}
 
 		// Second retry
-		cleanedUpReport2 := make([]int, len(report[i]))
-		copy(cleanedUpReport2, report[i])
-		cleanedUpReport2 = removeItemFromSlice(cleanedUpReport2, badLevelIndex+1)
+		retriedReport = make([]int, len(report[i]))
+		copy(retriedReport, report[i])
+		retriedReport = removeItemFromSlice(retriedReport, badLevelIndex+1)
 
-		debugPrint("CleanedUpReport2 %v", cleanedUpReport2)
-		badLevelIndex = getBadLevelIndex(cleanedUpReport2)
-
-		if badLevelIndex == -1 {
+		if getBadLevelIndex(retriedReport) == -1 {
+			debugPrint("-- REPORT SAFE")
 			count++
 			continue
 		}
+
+		debugPrint("-- REPORT NOT SAFE")
 	}
 	return count
 }
@@ -84,7 +84,7 @@ func isAscending(levels []int) bool {
 
 // -1 means all levels were good
 func getBadLevelIndex(levels []int) int {
-	debugPrint("\n*** Checking levels %v", levels)
+	debugPrint("\n** Checking levels %v", levels)
 
 	isAscending := isAscending(levels)
 
@@ -114,7 +114,6 @@ func getBadLevelIndex(levels []int) int {
 		if diff < 1 || diff > 3 {
 			debugPrint("NOT SAFE, diff is %v at i=%v", diff, i)
 			return i
-
 		}
 	}
 

@@ -5,9 +5,9 @@ import (
 )
 
 func debugPrint(format string, a ...any) (n int, err error) {
-	var debugging = false
+	var debugging = true
 	if debugging {
-		return fmt.Printf(format+"\n", a)
+		return fmt.Printf(format+"\n", a...)
 	}
 	return 0, err
 }
