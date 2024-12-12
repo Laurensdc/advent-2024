@@ -45,3 +45,23 @@ func ReadReports(filename string) [][]int {
 
 	return reports
 }
+
+func ReadXmasInput(filename string) []string {
+	file, err := os.Open(filename)
+
+	if err != nil {
+		fmt.Printf("Failed to read file %v because of %v\n", filename, err)
+		os.Exit(1)
+	}
+
+	defer file.Close()
+
+	var lines []string
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	return lines
+}

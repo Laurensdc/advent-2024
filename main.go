@@ -5,7 +5,7 @@ import (
 )
 
 func debugPrint(format string, a ...any) (n int, err error) {
-	var debugging = true
+	var debugging = false
 	if debugging {
 		return fmt.Printf(format+"\n", a...)
 	}
@@ -13,8 +13,8 @@ func debugPrint(format string, a ...any) (n int, err error) {
 }
 
 func main() {
-	reports := ReadReports("day02_input.txt")
-	output := CountSafeReportsWithTolerance(reports)
+	input := ReadXmasInput("day04_input.txt")
+	output := FindXmasWordCount(input)
 
 	fmt.Printf("%v\n", output)
 }
