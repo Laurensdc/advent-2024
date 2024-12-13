@@ -35,17 +35,33 @@ func TestHorizontalStringCount(t *testing.T) {
 
 func TestVerticalStringCount(t *testing.T) {
 	input := []string{
-		"wjfWjodDxx",
-		"wjfOjodRkx",
-		"wjWRjodOkD",
-		"ojODjodWkR",
-		"rjRWjodRkO",
-		"djDWjodRkW",
+		"xxxWxxxDxx",
+		"xxxOxxxRxx",
+		"WxWRxxxOxD",
+		"OxODxxxWxR",
+		"RxRxxxxxxO",
+		"DxDxxxxxxW",
 	}
-	expected := 4
+	expected := 5
 	output := verticalStringCount("WORD", input)
 
 	if output != expected {
 		t.Errorf("Expected\n%v\ngot\n%v\n", expected, output)
 	}
+}
+
+func TestDiagonalStringCount(t *testing.T) {
+	input := []string{
+		"WxxWxxWxxD",
+		"xOOxxxxORx",
+		"xRRxxxxORx",
+		"DxdDxxWxxD",
+	}
+	output := diagonalStringCount("WORD", input)
+	expected := 4
+
+	if output != expected {
+		t.Errorf("Expected\n%v\ngot\n%v\n", expected, output)
+	}
+
 }
