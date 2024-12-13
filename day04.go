@@ -1,5 +1,15 @@
 package main
 
+func FindXmasWordCount(lines []string) int {
+	xmasCount := 0
+
+	xmasCount += horizontalStringCount("XMAS", lines)
+	xmasCount += verticalStringCount("XMAS", lines)
+	xmasCount += diagonalStringCount("XMAS", lines)
+
+	return xmasCount
+}
+
 func invertString(str string) string {
 	// Convert string to rune slice, reverse it, and return as a new string
 	runes := []rune(str)
@@ -11,22 +21,25 @@ func invertString(str string) string {
 
 // How many times does needle or eldeen (inverted)
 // occur in s.
-func horizontalStringCount(needle, s string) int {
+func horizontalStringCount(needle string, lines []string) int {
 	count := 0
+	for _, s := range lines {
+		// Horizontal scans for the word XMAS in line
 
-	for i := range s {
-		// We will read len(needle) to the right,
-		// don't go out of bounds
-		if i > len(s)-len(needle) {
-			continue
-		}
+		for i := range s {
+			// We will read len(needle) to the right,
+			// don't go out of bounds
+			if i > len(s)-len(needle) {
+				continue
+			}
 
-		// Find needle
-		if s[i:i+len(needle)] == needle {
-			count++
-			// Find eldeen (inverted)
-		} else if s[i:i+len(needle)] == invertString(needle) {
-			count++
+			// Find needle
+			if s[i:i+len(needle)] == needle {
+				count++
+				// Find eldeen (inverted)
+			} else if s[i:i+len(needle)] == invertString(needle) {
+				count++
+			}
 		}
 	}
 
@@ -107,20 +120,4 @@ func diagonalStringCount(needle string, lines []string) int {
 	}
 
 	return count
-}
-
-func FindXmasWordCount(lines []string) int {
-	xmasCount := 0
-
-	xmasCount += verticalStringCount("XMAS", lines)
-	xmasCount += diagonalStringCount("XMAS", lines)
-
-	for _, line := range lines {
-		// Horizontal scans for the word XMAS in line
-		xmasCount += horizontalStringCount("XMAS", line)
-
-	}
-
-	return xmasCount
-
 }

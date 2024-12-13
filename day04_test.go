@@ -24,7 +24,7 @@ func TestFindXmasWordCount(t *testing.T) {
 }
 
 func TestHorizontalStringCount(t *testing.T) {
-	input := "xwj_`|fwoWORDwojjoDROWf'*wjofWORDWORDDROW__"
+	input := []string{"xwj_`|fwoWORDwojjoDROWf'*wjofWORDWORDDROW__"}
 	expected := 5
 	output := horizontalStringCount("WORD", input)
 
